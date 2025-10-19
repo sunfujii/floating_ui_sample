@@ -2,6 +2,8 @@
 (function() {
   if (document.getElementById('my-floating-chat')) return;
 
+  const CHAT_URL = "https://sunfujii.github.io/floating_ui_sample/chat.html"; // ← 固定URL
+
   const style = document.createElement('style');
   style.textContent = `
     #my-floating-chat {
@@ -45,26 +47,19 @@
   `;
   document.head.appendChild(style);
 
-  // チャットボタン
   const button = document.createElement('div');
   button.id = 'my-floating-chat';
   button.textContent = '💬';
   document.body.appendChild(button);
 
-  // iframe コンテナ
   const container = document.createElement('div');
   container.id = 'chat-iframe-container';
 
-  // 外部チャットURL（クエリや属性で動的に変更可能）
-  const scriptTag = document.currentScript;
-  const chatUrl = scriptTag.getAttribute('data-chat-url') || 'https://example.com/chat';
-
   const iframe = document.createElement('iframe');
-  iframe.src = chatUrl;
+  iframe.src = CHAT_URL;
   container.appendChild(iframe);
   document.body.appendChild(container);
 
-  // クリックで開閉
   button.addEventListener('click', () => {
     const visible = container.style.display === 'flex';
     container.style.display = visible ? 'none' : 'flex';
