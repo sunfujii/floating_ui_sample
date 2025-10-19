@@ -1,48 +1,86 @@
 (() => {
   const CHAT_URL = "https://sunfujii.github.io/floating_ui_sample/chat_simple.html";
+  const SIDEBAR_WIDTH = 400;
 
-  // ページ全体をラップする要素を作る
-  const wrapper = document.createElement("div");
-  wrapper.style.display = "flex";
-  wrapper.style.height = "100vh";
-  wrapper.style.margin = "0";
-  wrapper.style.padding = "0";
+  // スタイルを挿入
+  const style = document.createElement("style");
+  style.textContent = `
+    #chat-sidebar {
+      position: fixed;
+      top: 0;
+      right: -${SIDEBAR_WIDTH}px;
+      width: ${SIDEBAR_WIDTH}px;
+      height: 100vh;
+      background: #fff;
+      border-left: 1px solid #ccc;
+      box-shadow: -3px 0 6px rgba(0,0,0,0.1);
+      transition: right 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      z-index: 9998;
+    }
 
-  // 元々のbody内容を main-content に移す
-  const mainContent = document.createElement("div");
-  mainContent.style.flex = "1";
-  mainContent.style.overflowY = "auto";
-  mainContent.style.background = "#fafafa";
-  mainContent.innerHTML = document.body.innerHTML;
+    #chat-sidebar.open {
+      right: 0;
+    }
 
-  // サイドバーを生成
+    #chat-sidebar iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+      flex: 1;
+    }
+
+    #chat-toggle-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #0078ff;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 9999;
+      transition: right 0.3s ease;
+    }
+
+    #chat-toggle-btn:hover {
+      background: #005fd1;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // サイドバーを作成
   const sidebar = document.createElement("div");
   sidebar.id = "chat-sidebar";
-  sidebar.style.width = "400px";
-  sidebar.style.borderLeft = "1px solid #ddd";
-  sidebar.style.background = "#fff";
-  sidebar.style.display = "flex";
-  sidebar.style.flexDirection = "column";
-  sidebar.style.height = "100vh";
-  sidebar.style.position = "sticky";
-  sidebar.style.top = "0";
-  sidebar.style.boxShadow = "-2px 0 5px rgba(0,0,0,0.1)";
-
-  // iframeでチャットを埋め込む
   const iframe = document.createElement("iframe");
   iframe.src = CHAT_URL;
-  iframe.style.flex = "1";
-  iframe.style.border = "none";
-  iframe.style.width = "100%";
-  iframe.style.height = "100%";
   sidebar.appendChild(iframe);
+  document.body.appendChild(sidebar);
 
-  // bodyの中身を置き換え
-  document.body.innerHTML = "";
-  document.body.style.margin = "0";
-  document.body.appendChild(wrapper);
+  // トグルボタンを作成
+  const button = document.createElement("button");
+  button.id = "chat-toggle-btn";
+  button.textContent = "Chat";
+  document.body.appendChild(button);
 
-  // mainContentとsidebarをラップ内に追加
-  wrapper.appendChild(mainContent);
-  wrapper.appendChild(sidebar);
+  // 開閉トグル動作
+  let isOpen = false;
+  button.addEventListener("click", () => {
+    isOpen = !isOpen;
+    sidebar.classList.toggle("open", isOpen);
+    button.textContent = isOpen ? "Close" : "Chat";
+
+    // サイドバーが開いたときはボタンを左にずらす
+    if (isOpen) {
+      button.style.right = `${SIDEBAR_WIDTH + 20}px`;
+    } else {
+      button.style.right = "20px";
+    }
+  });
 })();
