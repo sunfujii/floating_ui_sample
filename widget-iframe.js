@@ -2,7 +2,7 @@
 (function() {
   if (document.getElementById('my-floating-chat')) return;
 
-  const CHAT_URL = "https://sunfujii.github.io/floating_ui_sample/chat.html"; // ← 固定URL
+  const CHAT_URL = "https://sunfujii.github.io/floating_ui_sample/chat_simple.html"; // ← 固定URL
 
   const style = document.createElement('style');
   style.textContent = `
